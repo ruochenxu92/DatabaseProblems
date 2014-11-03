@@ -1,0 +1,111 @@
+what is four types of duplication
+
+Most of the duplication we see falls into one of the following categories:
+
+imposed duplication
+
+inadvertent duplication
+
+impatient duplication
+
+inter developer duplication——***
+
+
+
+You get two major benefits if you write orthogonal systems:
+
+1. increased productivity
+
+2. reduced risk.
+
+
+
+what is shy code:
+
+
+But "shy" works two ways:
+
+1. don't reveal yourself to others, 
+
+2. and don't interact with too many people.
+
+ 
+
+Traccr code have the following advantages
+
+
+
+• Users get to see something working early. If you have successfully communicated what you are doing (see Great Expectations), your users will know they are seeing something immature. They won't be disappointed by a lack of functionality; they'll be ecstatic to see some visible progress toward their system. They also get to contribute as the project progresses, increasing their buy-in. These same users will likely be the people who'll tell you how close to the target each iteration is.
+
+• Developers build a structure to work in. The most daunting piece of paper is the one with nothing written on it. If you have worked out all the end-to-end interactions of your application, and have embodied them in code, then your team won't need to pull as much out of thin air. This makes everyone more productive, and encourages consistency.
+
+• You have an integration platform. As the system is connected end-to-end, you have an environment to which you can add new pieces of code once they have been unit-tested. Rather than attempting a big-bang integration, you'll be integrating every day (often many times a day). The impact of each new change is more apparent, and the interactions are more limited, so debugging and testing are faster and more accurate.
+
+• You have something to demonstrate. Project sponsors and top brass have a tendency to want to see demos at the most inconvenient times. With tracer code, you'll always have something to show them.
+
+• You have a better feel for progress. In a tracer code development, developers tackle use cases one by one. When one is
+
+  
+
+done, they move to the next. It is far easier to measure performance and to demonstrate progress to your user. Because each individual development is smaller, you avoid creating those monolithic blocks of code that are reported as 95% complete week after week.
+
+
+
+
+
+
+
+ There is a difference. 
+
+With a prototype, you're aiming to explore specific aspects of the final system. 
+
+With a true prototype, you will throw away whatever you lashed together when trying out the concept, and recode it properly using the lessons you've learned.
+
+
+
+
+
+
+Depending on your application, either or both of these situations may be unacceptable—for example, when storing satellite telemetry data, or as the internal format of a relational database.
+
+But even in these situations, it may be acceptable to store metadata about the raw data in plain text
+
+
+
+
+
+Tracer code is lean but complete, and forms part of the skeleton of the final system. 
+
+Think of prototyping as the reconnaissance and intelligence gathering that takes place before a single tracer bullet is fired.
+
+ 
+
+Why we care about plain text
+
+
+Since larger and slower aren't the most frequently requested features from users, why bother with plain text? What are the benefits?
+
+ 
+
+Why we care about plain text
+
+insurance against obsolescence     
+
+leverage   efficiency
+
+easier testing  
+
+
+
+Rubber Ducking
+
+A very simple but particularly useful technique for finding the cause of a problem is simply to explain it to someone else. 
+
+The other person should look over your shoulder at the screen, and nod his or her head constantly (like a rubber duck bobbing up and down in a bathtub). 
+
+They do not need to say a word; 
+
+the simple act of explaining, step by step, what the code is supposed to do often causes the problem to leap off the screen and announce itself.
+
+
+
