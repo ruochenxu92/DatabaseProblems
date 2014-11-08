@@ -1,0 +1,153 @@
+mac下同一个机器启动多个mysql实例
+
+博客分类： mysql
+ 
+在开发测试过程中有的时候可能需要不同的数据，这个时候可能就要频繁的导入导出数据，比较麻烦，如果在一个机器上可以有多个实例，就可以减少导入导出数据的操作，比较方便，下面就说一下怎么在mac下以不同的端口启动多个mysql的实例。 
+
+在mac下mysql一般装在
+Java代码  收藏代码
+/usr/local/mysql  
+
+这个时候默认的是使用3306端口 
+我们这里另建两个3307，3308 
+
+1，首先建两个目录 
+ 
+Java代码  收藏代码
+/usr/local/mysql/data_1/  
+  /usr/local/mysql/data_2/  
+
+  并把/usr/local/mysql/data/数据考入刚刚建好的两个目录 
+
+2在/usr/local/mysql下面建两个文件 
+文件名:mysql_start.sh 
+
+Java代码  收藏代码
+export PATH=/usr/local/mysql/bin:$PATH  
+CONF_FILE=/usr/local/mysql/my_multi.cnf  
+MYSQL_HOME=/usr/local/mysql  
+  
+$MYSQL_HOME/bin/mysqld_multi --defaults-extra-file=$CONF_FILE start $1,$2  
+
+
+mysql_start.sh这个文件是用来运行mysql的 
+
+文件名：my_multi.cnf 
+Java代码  收藏代码
+[mysqld_multi]  
+mysqld = /usr/local/mysql/bin/mysqld_safe  
+mysqladmin = /usr/local/mysql/bin/mysqladmin  
+user = root  
+  
+#实例1  
+[mysqld1]  
+socket = /tmp/mysql_3307.sock  
+#端口  
+port = 3307  
+#进程ID文件  
+pid-file = /usr/local/mysql/data_1/hostname.pid  
+#数据文件存储目录  
+datadir = /usr/local/mysql/data_1  
+#日志文件  
+log = /usr/local/mysql/data_1/hostname.log  
+#用户  
+user = root  
+  
+#实例2  
+[mysqld2]  
+socket = /tmp/mysql_3308.sock  
+port = 3308  
+pid-file = /usr/local/mysql/data_2/hostname.pid  
+datadir = /usr/local/mysql/data_2  
+log = /usr/local/mysql/data_2/hostname.log  
+user = root  
+
+
+上面的做好后就可以运行了 
+启动的时候 
+启动3307:sudo sh /usr/local/mysql/mysql_start.sh 1 
+启动3308:sudo sh /usr/local/mysql/mysql_start.sh 2 
+
+关闭数据就用 
+首先进入目录 
+cd /usr/local/mysql/bin/ 
+
+关闭3307:sudo ./mysqladmin -uroot -h127.0.0.1 -P3307  shutdown 
+关闭3308:sudo ./mysqladmin -uroot -h127.0.0.1 -P3308  shutdown 
+
+
+
+
+
+
+====================================================================
+启动多个mysql 实例
+发表回复
+1、  创建多个mysql database目录
+
+1
+Mysql_install_db  --datadir=/data/mysql_3307
+2、  设置database目录权限
+
+1
+Chown –R mysql /data
+3、  拷贝、设置my.cnf
+
+1
+cp  XXX/my.cnf /data/mysql_3307/my.cnf
+添加my.cnf
+
+1
+2
+log-error = /data/mysql_3307/localhost.localdomain.err
+pid-file = /data/mysql_3307/localhost.localdomain.pid
+4、  添加启动脚本：
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+#!/bin/ti
+rundir=`pwd`
+datadir=$rundir
+cnf=$rundir"/my.cnf"
+ 
+echo "server path : $rundir"
+echo "data path : $datadir"
+echo "cnf : $cnf"
+ 
+/usr/local/mysql/bin/mysqld_safe /
+--defaults-file="$cnf" /
+--pid-file="$rundir"/mysql.pid /
+--datadir="$datadir" /
+--socket="$rundir"/mysql.sock /
+&
+5、  OK,chmod a+x my.cnf,./my.cnf，启动
+
+6、Ok，启动正常，如上图所示。
+
+可能遇到的问题：
+
+1）/usr/local/mysql/libexec/mysqld: File ‘./mysql-bin.index’ not found (Errcode: 13)
+
+原因是没有执行第2步，给数据库数据文件夹设置用户组权限；
+
+2）Can’t find messagefile ‘/data/mysql_3307/share/mysql/english/errmsg.sys’
+
+需要在my.cnf中配置语言的路径，添加如下：language = /usr/local/mysql/share/mysql/English
+
+3）mysql 连接不上mysql server
+
+注意mysql 指明配置文件的路径，例如mysql –defaults-file=/data/mysql_3307/my.cnf 。在my.cnf文件中需要检查client.socket的文件是否正确。
+
